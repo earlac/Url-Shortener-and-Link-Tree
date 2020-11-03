@@ -1,0 +1,197 @@
+#include <stdio.h>
+#include <stdlib.h> /*Incluir la libreria*/
+#include <string.h>
+
+struct Link{
+	char longUrl[200];
+	char shortUrl[20];
+	int contVisitas;
+	char nombre[200];
+	char descripcion[200];
+	
+	struct Link *siguiente;
+};
+struct Link *primero, *ultimo;
+typedef struct Link LINKS;
+
+/*----FUNCIONALIDAD 1---------------------------------------------*/
+/*-----Ingresar URL-----------------------------------------------*/
+
+void codUrl(){
+    /*
+    F: Codifica la url.
+    E: url.
+    S: url codificada.*/
+    char nuevaUrl[20]= "brenarl.com/";
+    char url[200];
+    
+    LINKS *nuevo;
+    nuevo=(LINKS *) malloc (sizeof(LINKS));
+    if (nuevo== NULL) printf("No hay memoria disponible!\n");
+    
+    printf("Ingrese la URL:\n");
+    fflush(stdout);
+    fgets(nuevo-> longUrl, 200, stdin);
+    
+    printf("Ahora analizare los valores para crear una nueva url.\n");
+   
+    int letras[10]={1,3,4,5,2,8,8,7,1,2};
+    for (int i=0; i<10; i++){
+	    char temp = nuevo->longUrl[letras[i]];
+	    strcat(nuevaUrl, &temp);
+    }
+    printf("La URL codificada seria: \n%s\n\n", nuevaUrl);
+    
+    printf("Por favor ingrese la URL corta brindada.\n");
+    fflush(stdout);
+    fgets(nuevo-> shortUrl, 20, stdin);
+    fgets(nuevo-> shortUrl, 20, stdin);
+    
+    printf("Ingrese un nombre para describir esta URL.\n");
+    fgets(nuevo-> nombre, 200, stdin);
+    
+    printf("Ingrese una descripcion esta URL.\n");
+    fgets(nuevo-> nombre, 200, stdin);
+    
+    nuevo->contVisitas=0;
+}
+
+void ingresarTeclado(){
+	printf("Ingresar por teclado\n");
+	char url;
+	fflush(stdout);
+	scanf("%c", &url);
+	codUrl();
+}
+
+void ingresarArchivo(){
+	printf("Ingresar archivo\n");
+}
+
+void ingresarURL(){
+	int metodoIngreso;
+	printf("De que manera quiere ingresar el link?\n");
+	printf("1.-Entrada por teclado.\n2.-Entrada por archivo.\n");
+	scanf("%d", &metodoIngreso);
+	if (metodoIngreso== 1){
+		ingresarTeclado();
+	}
+	else if(metodoIngreso== 2){
+		ingresarArchivo();
+	}
+	else {printf("Ingrese una opcion valida.");
+		ingresarURL();}
+}
+
+/*----FUNCIONALIDAD 2--------------------------------------------*/
+/*------Buscar URL-----------------------------------------------*/
+
+void buscarURL(){
+
+}
+
+
+void mostrarRegistros(){
+
+}
+void borrarRegistro(){
+
+}
+void mostrarRegistrosHASH(){
+
+}
+void crearLinktree(){
+
+}
+void visualizarLinktree(){
+
+}
+void borrarLinktree(){
+
+}
+void modoInspeccionar(){
+
+}
+/*--------Menu principal-------------*/
+
+void mostrar_menu() {
+	printf("\n\nMenú:\n=====\n\n");
+	printf("1.- Ingresar URL / Acortar URL\n");
+	printf("2.- Buscar codigo URL\n");
+	printf("3.- Mostrar todos los registros almacenados, por orden de numero de registro\n");
+	printf("4.- Borrar registro URL\n");
+	printf("5.- Mostrar registros de la tabla HASH\n");
+	printf("6.- Crear linktr.ee\n");
+	printf("7.- Visualizar linktr.ee\n");
+	printf("8.- Borrar link.tree\n");
+	printf("9.- Modo inspeccionar\n");
+	printf("s.- Modo inspeccionar\n\n");
+	printf("Escoge una opción: ");
+	fflush(stdout);
+}
+
+
+int menu() {
+	char opcion;
+	do{
+		mostrar_menu();
+		opcion = getchar();
+		switch ( opcion ) {
+			case '1': ingresarURL(); break;
+			case '2': buscarURL(); break;
+			case '3': mostrarRegistros(); break;
+			case '4': borrarRegistro(); break;
+			case '5': mostrarRegistrosHASH(); break;
+			case '6': crearLinktree();break;
+			case '7': visualizarLinktree();break;
+			case '8': borrarLinktree();break;
+			case '9': modoInspeccionar();break;
+			case 's': exit( 1 );
+			case 'S': exit( 1 );
+		default:
+			printf("f");
+			break;
+		}
+	}while(opcion!='s');
+}
+
+int main(){
+	int tamannoHash;
+	printf("De qué tamaño prefiere usar la tabla de Hash?\nSe recomienda un tamaño de 20 elementos.\n");
+	fflush(stdout);
+	scanf("%d", &tamannoHash);
+	
+	printf("Se usará una tabla Hash de %d elementos.\n",tamannoHash);
+	#define TABLE_SIZE tamannoHash
+	typedef struct linkHash{
+	char longUrl[200];
+	char shortUrl[20];
+	int contVisitas;
+	char nombre;
+	char descripcion;
+	
+	struct linkHash *next;
+	} linkHash;
+	linkHash * hashTable[TABLE_SIZE];
+	
+	menu();
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
