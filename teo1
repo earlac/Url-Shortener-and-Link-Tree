@@ -1,0 +1,257 @@
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct Link{
+	char longUrl[200];
+	char shortUrl[20];
+	int contVisitas;
+	char nombre[200];
+	char descripcion[200];
+	
+	struct Link *siguiente;
+};
+struct Link *primero, *ultimo;
+typedef struct Link LINKS;
+LINKS * hash_table[12];
+/*----FUNCIONALIDAD 1---------------------------------------------*/
+/*-----Ingresar URL-----------------------------------------------*/
+unsigned int hash(char *nombre, int tamannoHash){
+	int lenght = strnlen(nombre, 200);
+	unsigned int hash_value=0;
+	for (int i=0; i<lenght; i++){
+		hash_value+= nombre[i];
+		hash_value= (hash_value*nombre[i])% tamannoHash;
+	}
+	return hash_value;
+}
+
+int hash_table_insert(LINKS *p, int tamannoHash){
+	if(p == NULL) {return false;};
+	int index = hash(p->nombre, tamannoHash);
+	p->siguiente= hash_table[index];
+	hash_table[index]=p;
+	return true;}
+	
+void codUrl(int tamannoHash){
+    /*
+    F: Codifica la url.
+    E: url.
+    S: url codificada.*/
+    char nuevaUrl[20]= "brnarl.co/";
+    char url[200];
+    
+    LINKS *nuevo;
+    nuevo=(LINKS *) malloc (sizeof(LINKS));
+    if (nuevo== NULL) printf("No hay memoria disponible!\n");
+    
+    printf("Ingrese la URL:\n");
+    fflush(stdout);
+    fgets(nuevo-> longUrl, 200, stdin);
+    
+    printf("Ahora analizare los valores para crear una nueva url.\n");
+   
+    printf("Ingrese un nombre para describir esta URL.\n");
+    fflush(stdout);
+    fgets(nuevo-> nombre, 200, stdin);
+    
+    int letras[9]={1,3,4,5,8,8,7,1,2};
+    for (int i=0; i<10; i++){
+	    char temp = nuevo->longUrl[letras[i]];
+	    strcat(nuevaUrl, &temp);
+    }
+    printf("La URL codificada seria: \n%s\n\n", nuevaUrl);
+    
+    printf("Por favor ingrese la URL corta brindada.\n");
+    fflush(stdout);
+    fgets(nuevo-> shortUrl, 20, stdin);
+    
+    
+    printf("Ingrese una descripcion esta URL.\n");
+    fflush(stdout);
+    fgets(nuevo-> descripcion, 200, stdin);
+    fgets(nuevo-> descripcion, 200, stdin);
+    
+    
+    nuevo->contVisitas=0;
+    hash_table_insert(nuevo, tamannoHash);
+    nuevo->siguiente=NULL;
+    if(primero==NULL){
+    	printf("Primer elemento\n");
+    	primero= nuevo;
+    	ultimo= nuevo;
+    }else{
+    	ultimo->siguiente= nuevo;
+    	ultimo= nuevo;
+    }
+}
+
+void ingresarTeclado( int tamannoHash){
+	printf("Ingresar por teclado\n");
+	char url;
+	fflush(stdout);
+	scanf("%c", &url);
+	codUrl( tamannoHash);
+}
+
+void ingresarArchivo(tamannoHash){
+	printf("Ingresar archivo\n");
+}
+
+void ingresarURL(int tamannoHash){
+	int metodoIngreso;
+	printf("De que manera quiere ingresar el link?\n");
+	printf("1.-Entrada por teclado.\n2.-Entrada por archivo.\n");
+	scanf("%d", &metodoIngreso);
+	if (metodoIngreso== 1){
+		ingresarTeclado(tamannoHash);
+	}
+	else if(metodoIngreso== 2){
+		ingresarArchivo(tamannoHash);
+	}
+	else{printf("Ingrese una opcion valida.");
+		ingresarURL( tamannoHash);}
+}
+
+/*----FUNCIONALIDAD 2--------------------------------------------*/
+/*------Buscar URL-----------------------------------------------*/
+
+void buscarURL(){
+	char urlAux;
+	LINKS *auxiliar;
+	auxiliar = primero;
+	int i; i=0;
+	printf("Indique el nombre de la bebida está buscando?: ");
+	fflush(stdout);
+	scanf("%s", &urlAux);
+	while (auxiliar!=NULL){
+
+		if(auxiliar->longUrl == &urlAux){
+			printf("Link encontrado");
+			break;}
+		else{
+			i++;}
+		}
+	if (auxiliar == NULL){
+		printf("\nNo se encontró\n");}
+}
+
+/*----FUNCIONALIDAD 3--------------------------------------------*/
+/*------MOSTRAR URLs---------------------------------------------*/
+void mostrarRegistros(){
+	LINKS *auxiliar; 
+	int i; i=0;
+
+	auxiliar = primero;
+
+	printf("\nMostrando la lista completa:\n\n");
+
+	while (auxiliar!=NULL) {
+		printf( "Nombre: \t\t%s\nDescripcion de la url: \t%s\nCodigo URL: \t\t%s\nShort URL: \t\t%s\n",
+		auxiliar->nombre,
+		auxiliar->descripcion, 
+		auxiliar->longUrl,
+		auxiliar->shortUrl);
+		auxiliar = auxiliar->siguiente;
+		i++;
+	}
+	if (i==0) printf( "\nLa lista está vacía!!\n" );
+}
+
+
+void borrarRegistro(){
+
+}
+void mostrarRegistrosHASH(){
+
+}
+void crearLinktree(){
+
+}
+void visualizarLinktree(){
+
+}
+void borrarLinktree(){
+
+}
+void modoInspeccionar(){
+
+}
+/*--------Menu principal-------------*/
+
+void mostrar_menu() {
+	printf("\n\nMenú:\n=====\n\n");
+	printf("1.- Ingresar URL / Acortar URL\n");
+	printf("2.- Buscar codigo URL\n");
+	printf("3.- Mostrar todos los registros almacenados, por orden de numero de registro\n");
+	printf("4.- Borrar registro URL\n");
+	printf("5.- Mostrar registros de la tabla HASH\n");
+	printf("6.- Crear linktr.ee\n");
+	printf("7.- Visualizar linktr.ee\n");
+	printf("8.- Borrar link.tree\n");
+	printf("9.- Modo inspeccionar\n");
+	printf("s.- Salir\n\n");
+	printf("Escoge una opción: ");
+	fflush(stdout);
+}
+
+
+int menu(tamannoHash) {
+	char opcion;
+	do{
+		mostrar_menu();
+		opcion = getchar();
+		switch ( opcion ) {
+			case '1': ingresarURL(tamannoHash); break;
+			case '2': buscarURL(); break;
+			case '3': mostrarRegistros(); break;
+			case '4': borrarRegistro(); break;
+			case '5': mostrarRegistrosHASH(); break;
+			case '6': crearLinktree();break;
+			case '7': visualizarLinktree();break;
+			case '8': borrarLinktree();break;
+			case '9': modoInspeccionar();break;
+			case 's': exit( 1 );
+			case 'S': exit( 1 );
+		default:
+			printf("Topamos un error");
+			break;
+		}
+	}while(opcion!='s');
+}
+
+int main(){
+	int tamannoHash;
+	printf("De qué tamaño prefiere usar la tabla de Hash?\nSe recomienda un tamaño de 20 elementos.\n");
+	fflush(stdout);
+	scanf("%d", &tamannoHash);
+	
+	printf("Se usará una tabla Hash de %d elementos.\n",tamannoHash);
+
+	for(int i=0; i< tamannoHash; i++){
+		hash_table[i]= NULL;
+	};
+	
+	menu(tamannoHash);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
