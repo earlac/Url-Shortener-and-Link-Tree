@@ -121,86 +121,186 @@ void annadirUrl(){
 	nuevo=(url *) malloc (sizeof(url));
 	if (nuevo== NULL) printf("No hay memoria disponible!\n");
 	
-	printf("Ingrese la URL:\n");
-    fflush(stdout);
-    fgets(nuevo-> longUrl, MAX_NAME, stdin);
-    fgets(nuevo-> longUrl, MAX_NAME, stdin);
-  
-  	printf("Ahora analizare los valores para crear una nueva url.(AUN EN PROCESO.)\n");
-  	
-	printf("Ingrese un nombre para describir esta URL.\n");
-    fflush(stdout);
-    fgets(nuevo-> nombre, MAX_NAME, stdin);
-    /*--------------*/
-    char temporal[500];
-        
-    for(int f=0; f<strlen(nuevo->longUrl);f++){
-    	char temp = nuevo->longUrl[f];
+	int x = 0;
+	printf("\n\r\r Opciones Disponibles: \n\n1.Desde un archivo ");
+	printf("\n2.Directo de terminal\n \nDigite el número correspondiente: ");
+	fflush(stdout);
+	scanf("%d", &x);
+	if (x == 1)
+	//LLama a obtenerArchivo
+	{
+		char link [MAX_NAME];
+		char nombre [MAX_NAME]; //Nombre del archivo
 
-    	ABC *nuevoabc;
-		nuevoabc=(ABC *) malloc (sizeof(ABC));
-		
-		nuevoabc->letra= temp;
-		
-		nuevoabc->siguienteabc=NULL;
+		//Asignar el nombre al archivo
+		printf("Ingrese el nombre del archivo: \n");
+		scanf("%s", nombre);
+
+		FILE *archivo = fopen(nombre, "r");
+		if (archivo == NULL)
+		{
+			printf("\n\r¡Archivo vacío!\n");
+			annadirUrl();
+		}
+		else
+		{
+			int a;
+			while (fgets(link, sizeof(link), archivo) != NULL)
+			{
+				printf("URL %d: ", a=a+1);
+				fputs(link, stdout);
+				fgets(nuevo-> longUrl, MAX_NAME, stdout);
+
+					//Annadir URL n numero de veces
+				printf("Ahora analizaré los valores para crear una nueva url.(AUN EN PROCESO.)\n");  
+				printf("Ingrese un nombre para describir esta URL.\n");
+				fflush(stdout);
+    			fgets(nuevo-> nombre, MAX_NAME, stdin);
+    			/*--------------*/
+    			char temporal[500];
+				for(int f=0; f<strlen(nuevo->longUrl);f++){ //Algoritmo para nuevo URL
+    				char temp = nuevo->longUrl[f];
+    				ABC *nuevoabc;
+					nuevoabc=(ABC *) malloc (sizeof(ABC));
+					nuevoabc->letra= temp;
+					nuevoabc->siguienteabc=NULL;
+					if(primeroabc==NULL){
+						printf("Primer elemento\n");
+						primeroabc= nuevoabc;
+						ultimoabc= nuevoabc;
+					}else{
+						ultimoabc->siguienteabc= nuevoabc;
+						ultimoabc= nuevoabc;
+						}
+    				url *auxiliar; 
+					int g; g=0;
+					auxiliar = primero;
+					}
+    			ABC *auxiliar2; 
+				int g; g=0;
+
+				auxiliar2 = primeroabc;
+				char nuevaUrl[20]= "brnarl.co/";
+
+    			while (auxiliar2!=NULL && g<19) {
+					int x= (char)auxiliar2->letra;
+					char y = (char)x;
+
+					if((auxiliar2->letra)%2!=0){
+					
+						strcat(nuevaUrl, &y);
+					}
+					auxiliar2 = auxiliar2->siguienteabc;
+					g++;
+					}
+				printf("%s", nuevaUrl);
 	
-		if(primeroabc==NULL){
-			printf("Primer elemento\n");
-			primeroabc= nuevoabc;
-			ultimoabc= nuevoabc;
-		}else{
-			ultimoabc->siguienteabc= nuevoabc;
-			ultimoabc= nuevoabc;
-    }
-    	url *auxiliar; 
+    			/*--------------*/
+    			printf("Por favor ingrese la URL corta brindada.(ESCRIBA CUALQUIERA.)\n");
+    			fflush(stdout);
+    			fgets(nuevo-> shortUrl, MAX_NAME, stdin);
+
+				printf("Ingrese una descripcion esta URL.\n");
+    			fflush(stdout);
+    			fgets(nuevo-> descripcion, MAX_NAME, stdin);
+
+				nuevo->contVisitas=0;
+
+				nuevo->siguiente=NULL;
+
+    			if(primero==NULL){
+    				printf("Primer elemento\n");
+    				primero= nuevo;
+    				ultimo= nuevo;
+    			}else{
+    				ultimo->siguiente= nuevo;
+    				ultimo= nuevo;
+    			}
+    			insertarTabla(nuevo);
+			}
+			fclose(archivo);
+		}
+	}
+	else
+	{
+		printf("Ingrese la URL:\n");
+		fflush(stdout);
+		fgets(nuevo-> longUrl, MAX_NAME, stdin);
+		fgets(nuevo-> longUrl, MAX_NAME, stdin);
+		//Llamar a annadir URLprintf("Ahora analizare los valores para crear una nueva url.(AUN EN PROCESO.)\n");  
+		printf("Ingrese un nombre para describir esta URL.\n");
+	
+		fflush(stdout);
+    	fgets(nuevo-> nombre, MAX_NAME, stdin);
+    	/*--------------*/
+    	char temporal[500];
+	
+		for(int f=0; f<strlen(nuevo->longUrl);f++){ //Algoritmo para nuevo URL
+    		char temp = nuevo->longUrl[f];
+
+    		ABC *nuevoabc;
+			nuevoabc=(ABC *) malloc (sizeof(ABC));
+
+			nuevoabc->letra= temp;
+
+			nuevoabc->siguienteabc=NULL;
+
+			if(primeroabc==NULL){
+				printf("Primer elemento\n");
+				primeroabc= nuevoabc;
+				ultimoabc= nuevoabc;
+			}else{
+				ultimoabc->siguienteabc= nuevoabc;
+				ultimoabc= nuevoabc;
+    	}
+    		url *auxiliar; 
+			int g; g=0;
+
+			auxiliar = primero;
+    	}
+	
+    	ABC *auxiliar2; 
 		int g; g=0;
 
-		auxiliar = primero;
-    }
-    
-    ABC *auxiliar2; 
-	int g; g=0;
+		auxiliar2 = primeroabc;
+		char nuevaUrl[20]= "brnarl.co/";
 
-	auxiliar2 = primeroabc;
-	char nuevaUrl[20]= "brnarl.co/";
-	
-    while (auxiliar2!=NULL && g<19) {
-			int x= (char)auxiliar2->letra;
-			char y = (char)x;
-			    
-			if((auxiliar2->letra)%2!=0){
-			
-				strcat(nuevaUrl, &y);
+    	while (auxiliar2!=NULL && g<19) {
+				int x= (char)auxiliar2->letra;
+				char y = (char)x;
+
+				if((auxiliar2->letra)%2!=0){
+				
+					strcat(nuevaUrl, &y);
+				}
+				auxiliar2 = auxiliar2->siguienteabc;
+				g++;
 			}
-			auxiliar2 = auxiliar2->siguienteabc;
-			g++;
-		}
-	printf("%s", nuevaUrl);
-	
-    /*--------------*/
-    printf("Por favor ingrese la URL corta brindada.(ESCRIBA CUALQUIERA.)\n");
-    fflush(stdout);
-    fgets(nuevo-> shortUrl, MAX_NAME, stdin);
-	
-	printf("Ingrese una descripcion esta URL.\n");
-    fflush(stdout);
-    fgets(nuevo-> descripcion, MAX_NAME, stdin);
+		printf("%s", nuevaUrl);
 
-	nuevo->contVisitas=0;
-	
-	
-	
-	nuevo->siguiente=NULL;
-	
-    if(primero==NULL){
-    	printf("Primer elemento\n");
-    	primero= nuevo;
-    	ultimo= nuevo;
-    }else{
-    	ultimo->siguiente= nuevo;
-    	ultimo= nuevo;
-    }
-    insertarTabla(nuevo);
+    	/*--------------*/
+    	printf("Por favor ingrese la URL corta brindada.(ESCRIBA CUALQUIERA.)\n");
+    	fflush(stdout);
+    	fgets(nuevo-> shortUrl, MAX_NAME, stdin);
+
+		printf("Ingrese una descripcion esta URL.\n");
+    	fflush(stdout);
+    	fgets(nuevo-> descripcion, MAX_NAME, stdin);
+
+		nuevo->contVisitas=0;
+
+		nuevo->siguiente=NULL;
+
+    	if(primero==NULL){
+    		printf("Primer elemento\n");
+    		primero= nuevo;
+    		ultimo= nuevo;
+    	}else{
+    		ultimo->siguiente= nuevo;
+    		ultimo= nuevo;
+    	}
+    	insertarTabla(nuevo);
+	}
 }
 /*----FUNCIONALIDAD 2--------------------------------------------*/
 /*------BUSCAR URL-----------------------------------------------*/
