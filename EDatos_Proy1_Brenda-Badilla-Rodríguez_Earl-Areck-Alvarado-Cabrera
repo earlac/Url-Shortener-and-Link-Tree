@@ -1,3 +1,11 @@
+/*
+Creado por Earl Alvarado y Brenda Badilla
+Creado el 2 de Noviembre, 7:50 pm
+Última modificación: 7 de Nov, 23:46
+
+Programa que utiliza estructuras de datos y analiza una tabla hash para introducir datos del tipo bit.ly que son URLs recortados y linktr.ee s que son bibliotecas de urls y los simulan con información guardada.
+
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,9 +38,21 @@ typedef struct linkTree{
 } linkTree;
 struct linkTree *primeroLk, *ultimoLk;
 
-/----FUNCIONALIDAD 1--------------------------------------------/
-/----Añadir URLs, mostrar lista Hash----------------------------/
+typedef struct ABC{
+	char letra;
+	
+	struct ABC *siguienteabc;
+} ABC;
+struct ABC *primeroabc, *ultimoabc;
+
+/*----FUNCIONALIDAD 1--------------------------------------------*/
+/*----Añadir URLs, mostrar lista Hash----------------------------*/
 unsigned int hash(char *longUrl){
+	/*
+	F: Función hash para asignar un lugar al elemento a insertar
+	E: El elemento a insertar
+	S: Valor modificado por la función
+	*/
 	int length = strnlen(longUrl, MAX_NAME);
 	unsigned int valorHash=0;
 	for (int i =0; i< length; i++){
@@ -45,12 +65,22 @@ unsigned int hash(char *longUrl){
 }
 
 bool inicializarTablaHash(){
+	/*
+	F: crea una tabla hash 
+	E: NA
+	S: NA
+	*/
 	for (int i =0; i<tamannoTabla; i++){
 		tablaHash[i]=NULL;
 	}
 }
 
 void imprimirTabla(){
+	/*
+	F: Muestra en pantalla la tabla hash.
+	E: NA
+	S: Tabla hash con colisiones.
+	*/
 	printf("Tabla Hash----------------\n--------------------------\n");
 	for (int i =0; i<tamannoTabla; i++){
 		if (tablaHash[i]==NULL){
@@ -69,6 +99,11 @@ void imprimirTabla(){
 }
 
 bool insertarTabla(url *p){
+	/*
+	F: Inserta el elemento del tipo url en la tabla hash
+	E: Elemento tipo url
+	S: tabla hash modificada
+	*/
 	if (p == NULL) return false;
 	int index = hash(p->longUrl);
 	p->siguiente= tablaHash[index];
@@ -77,6 +112,11 @@ bool insertarTabla(url *p){
 	return true;
 }
 void annadirUrl(){
+	/*
+	F: Crea un elemento del tipo url y solicita la información para añadirlo a la lista enlazada de este tipo.
+	E: Información necesaria para la URL
+	S: Se crea el nodo de este tipo
+	*/
 	url *nuevo;
 	nuevo=(url *) malloc (sizeof(url));
 	if (nuevo== NULL) printf("No hay memoria disponible!\n");
@@ -91,7 +131,53 @@ void annadirUrl(){
 	printf("Ingrese un nombre para describir esta URL.\n");
     fflush(stdout);
     fgets(nuevo-> nombre, MAX_NAME, stdin);
+    /*--------------*/
+    char temporal[500];
+        
+    for(int f=0; f<strlen(nuevo->longUrl);f++){
+    	char temp = nuevo->longUrl[f];
+
+    	ABC *nuevoabc;
+		nuevoabc=(ABC *) malloc (sizeof(ABC));
+		
+		nuevoabc->letra= temp;
+		
+		nuevoabc->siguienteabc=NULL;
+	
+		if(primeroabc==NULL){
+			printf("Primer elemento\n");
+			primeroabc= nuevoabc;
+			ultimoabc= nuevoabc;
+		}else{
+			ultimoabc->siguienteabc= nuevoabc;
+			ultimoabc= nuevoabc;
+    }
+    	url *auxiliar; 
+		int g; g=0;
+
+		auxiliar = primero;
+    }
     
+    ABC *auxiliar2; 
+	int g; g=0;
+
+	auxiliar2 = primeroabc;
+	char nuevaUrl[20]= "brnarl.co/";
+	
+    while (auxiliar2!=NULL && g<19) {
+			int x= (char)auxiliar2->letra;
+			char y = (char)x;
+			    
+			if((auxiliar2->letra)%2!=0){
+			
+				strcat(nuevaUrl, &y);
+			}
+			auxiliar2 = auxiliar2->siguienteabc;
+			g++;
+		}
+	printf("%s", nuevaUrl);
+	
+    /*--------------*/
     printf("Por favor ingrese la URL corta brindada.(ESCRIBA CUALQUIERA.)\n");
     fflush(stdout);
     fgets(nuevo-> shortUrl, MAX_NAME, stdin);
@@ -101,6 +187,8 @@ void annadirUrl(){
     fgets(nuevo-> descripcion, MAX_NAME, stdin);
 
 	nuevo->contVisitas=0;
+	
+	
 	
 	nuevo->siguiente=NULL;
 	
@@ -114,10 +202,15 @@ void annadirUrl(){
     }
     insertarTabla(nuevo);
 }
-/----FUNCIONALIDAD 2--------------------------------------------/
-/------BUSCAR URL-----------------------------------------------/
+/*----FUNCIONALIDAD 2--------------------------------------------*/
+/*------BUSCAR URL-----------------------------------------------*/
 
 void buscarURL(){
+	/*
+	F: Busca un elemento en la lista enlazada del tipo url que coincida con el que el usuario busca y lo muestra con su información.
+	E: Url a buscar
+	S: Información de la URL
+	*/
 	char urlAux[MAX_NAME];
 	url *auxiliar;
 	auxiliar = primero;
@@ -143,9 +236,14 @@ void buscarURL(){
 	if (auxiliar == NULL){
 		printf("\nNo se encontró\n");}
 }
-/----FUNCIONALIDAD 3--------------------------------------------/
-/------MOSTRAR URLs---------------------------------------------/
+/*----FUNCIONALIDAD 3--------------------------------------------*/
+/*------MOSTRAR URLs---------------------------------------------*/
 void mostrarRegistros(){
+	/*
+	F: Muestra como una lista tipo factura todos los elementos registrados
+	E: NA
+	S: Imprime en pantalla todo lo que hay en la lista enlazada.
+	*/
 	url *auxiliar; 
 	int i; i=0;
 
@@ -166,9 +264,14 @@ void mostrarRegistros(){
 	if (i==0) printf( "\nLa lista está vacía!!\n" );
 }
 
-/----FUNCIONALIDAD D--------------------------------------------/
-/----BORRAR URLs------------------------------------------------/
+/*----FUNCIONALIDAD D--------------------------------------------*/
+/*----BORRAR URLs------------------------------------------------*/
 void borrarRegistro(){
+	/*
+	F: Elimina el nodo registrado en la lista enlazada de este tipo de Struct
+	E: qué nodo se desea eliminar
+	S: Lista enlazada sin el nodo previamente eliminado.
+	*/
 	int posc;
 	url *auxiliar;
 	auxiliar = primero;
@@ -215,10 +318,15 @@ void borrarRegistro(){
 	printf("Eliminado.");	
 }
 
-/----FUNCIONALIDAD G--------------------------------------------/
-/----VISUALIZAR LINKTREE----------------------------------------/
+/*----FUNCIONALIDAD G--------------------------------------------*/
+/*----VISUALIZAR LINKTREE----------------------------------------*/
 void visualizarLinkTreeGeneral(){
-	linkTree auxiliar1; / para recorrer la lista */
+	/*
+	F: Muestra el nombre de los linktrees preexistentes
+	E: NA
+	S: Los linktrees preexistentes.
+	*/
+	linkTree *auxiliar1; /* para recorrer la lista */
 	int i; i=0;
 	auxiliar1 = primeroLk;
 	printf("\nMostrando la lista completa:\n\n");
@@ -233,6 +341,11 @@ void visualizarLinkTreeGeneral(){
 }
 
 void visualizarLinkTree(){
+	/*
+	F: Especifica para escoger el link tree que se desea observar.
+	E: Qué linktree se desea ver bien
+	S: Interior de cada linktree o url.
+	*/
 	int posc;
 	
 	linkTree *auxiliar;
@@ -251,19 +364,49 @@ void visualizarLinkTree(){
 		auxiliar = auxiliar->siguienteLk;
 		posc-=1;
 		break;}
-	printf("\nNombre: \t\t%s\n1-\t%s\n", auxiliar-> nombreLinkTree, (auxiliar->primerLk)->shortUrl);
+	printf("\nNombre: \t\t%s\n1-\t%s\n", auxiliar-> nombreLinkTree, (auxiliar->primerLk)->nombre);
 	if(auxiliar->segundoLk!=NULL){
-		printf("2-\t%s\n", (auxiliar->segundoLk)->shortUrl);
+		printf("2-\t%s\n", (auxiliar->segundoLk)->nombre);
 	};
 	if(auxiliar->tercerLk!=NULL){
-		printf("3-\t%s\n", (auxiliar->tercerLk)->shortUrl);
+		printf("3-\t%s\n", (auxiliar->tercerLk)->nombre);
 	}
+	
+	int posc2;
+	printf("Cuál posición de linkTree quiere visualizar?: ");
+	fflush(stdout);
+	scanf("%d", &posc2);
+	if (posc2==1){
+		printf("1\n-URL largo: \t\t%s\n-Url Corto: \t\t%s\n\n", (auxiliar->primerLk)->longUrl, (auxiliar->primerLk)->longUrl);
+		int contV;
+		contV= (auxiliar->primerLk)->contVisitas;
+		contV+=1;
+		(auxiliar->primerLk)->contVisitas= contV;
+	}else if (posc2==2){
+		printf("2\n-URL largo: \t\t%s\n-Url Corto: \t\t%s\n\n", (auxiliar->segundoLk)->longUrl, (auxiliar->segundoLk)->longUrl);
+		int contV;
+		contV= (auxiliar->segundoLk)->contVisitas;
+		contV+=1;
+		(auxiliar->segundoLk)->contVisitas= contV;
+	}else{
+		printf("3\n-URL largo: \t\t%s\n-Url Corto: \t\t%s\n\n", (auxiliar->tercerLk)->longUrl, (auxiliar->tercerLk)->longUrl);
+		int contV;
+		contV= (auxiliar->tercerLk)->contVisitas;
+		contV+=1;
+		(auxiliar->tercerLk)->contVisitas= contV;
+	}
+	
 }
 
-/----FUNCIONALIDAD F--------------------------------------------/
-/----CREAR LINKTREE---------------------------------------------/
+/*----FUNCIONALIDAD F--------------------------------------------*/
+/*----CREAR LINKTREE---------------------------------------------*/
 
 void modificarLinkTree(){
+	/*
+	F: Añadir elementos al linktree
+	E: Qué linktree desea modificar
+	S: LinkTree modificado
+	*/
 	visualizarLinkTreeGeneral();
 	
 	int posc;
@@ -308,8 +451,13 @@ void modificarLinkTree(){
 	
 	
 }
-/------------------------------/
+/*------------------------------*/
 void CrearLinkTree(unsigned* arr[MAX_NAME]){
+	/*
+	F: Crea un nodo del tipo linktree y lo añade a una lista enlazada
+	E: el alias y el elemento primero de la lista
+	S: elemento creado y enlazado
+	*/
 	int urlAux;
 	int cont; cont=0;
 	int linktreeRevisar;
@@ -357,6 +505,11 @@ void CrearLinkTree(unsigned* arr[MAX_NAME]){
 }
 
 void mostrarMenuLinkTree(){
+	/*
+	F: Imprime las opciones de la funcion de mostrarMenu()
+	E: NA
+	S: texto de menú
+	*/
 	printf("\n\nMenú LinkTree:\n=====\n\n");
 	printf("1.- Crear linktree.\n");
 	printf("2.- Modificar LinkTree preexistente.\n");
@@ -365,6 +518,11 @@ void mostrarMenuLinkTree(){
 }
 
 void crearModificarLinktree(unsigned* arr[MAX_NAME]){
+	/*
+	F: Menu para ver si el usuario quiere modificar o crear un linktree
+	E: Qué opción desea hacer
+	S: La funcionalidad correspondiente
+	*/
 	char opcion;
 	do{
 		mostrarMenuLinkTree();
@@ -381,9 +539,14 @@ void crearModificarLinktree(unsigned* arr[MAX_NAME]){
 	}while(opcion!='4');
 }
 
-/----FUNCIONALIDAD H--------------------------------------------/
-/----BORRAR LINKTREE--------------------------------------------/
+/*----FUNCIONALIDAD H--------------------------------------------*/
+/*----BORRAR LINKTREE--------------------------------------------*/
 void borrarLinktree(){
+	/*
+	F: Elimina un nodo del tipo LinkTree de la lista enlazada
+	E: Slicita qué nodo quiere eliminar
+	S: Lista enlazada sin el nodo eliminado
+	*/
 	int posc;
 	linkTree *auxiliar;
 	auxiliar = primeroLk;
@@ -429,9 +592,14 @@ void borrarLinktree(){
 		}
 	printf("Eliminado.");
 }
-/----FUNCIONALIDAD I--------------------------------------------/
-/----INSPECCIONAR..---------------------------------------------/
+/*----FUNCIONALIDAD I--------------------------------------------*/
+/*----INSPECCIONAR..---------------------------------------------*/
 void inspeccionarUrl(){
+	/*
+	F: inspecciona los elementos dentro de la lista enlazada de este tipo de struct
+	E: NA
+	S: Inspección de datos.
+	*/
 	url *auxiliar; 
 	int i; i=0;
 
@@ -452,13 +620,18 @@ void inspeccionarUrl(){
 }
 
 void inspeccionarLinkTree(){
+	/*
+	F: inspecciona los elementos dentro de la lista enlazada de este tipo de struct
+	E: NA
+	S: Inspección de datos.
+	*/
 	linkTree *auxiliar; 
 
 	auxiliar = primeroLk;
 
 	printf("\nMostrando la lista de LinkTrees:\n\n");
 
-	printf("Registro #%d-------------------\n", i+1);
+	printf("Registro #-------------------\n");
 	printf("\t\t\tTamaños || Posiciones de memoria\n");
 	printf("-nombre:\t\t%li\t\t%p\n", sizeof(auxiliar->nombreLinkTree), auxiliar->nombreLinkTree);
 
@@ -472,6 +645,11 @@ void inspeccionarLinkTree(){
 	}
 }
 void modoInspeccionar(){
+	/*
+	F: Imprime las posiciones en memmoria y los tamaños de los structs y solicita a las funciones auxiliares lo mismo de los elementos que los conforman.
+	E: NA
+	S: Información de tamaños y posiciones de memoria.
+	*/
 	printf("Struct Url:\n");
 	printf("-Posición en memoria:\t%p\n", &primero);
 	printf("-Tamaño en memoria de\ncada elemento:\t\t%li\n", sizeof(primero));
@@ -488,9 +666,14 @@ void modoInspeccionar(){
 	inspeccionarUrl();
 	inspeccionarLinkTree();
 }
-/----MENU PRINCIPAL---------------------------------------------/
-/---------------------------------------------------------------/
+/*----MENU PRINCIPAL---------------------------------------------*/
+/*---------------------------------------------------------------*/
 void mostrarMenu() {
+	/*
+	F: Imprime las opciones a destacar en el menu
+	E: NA
+	S: NA
+	*/
 	printf("\n\nMenú:\n=====\n\n");
 	printf("1.- Ingresar URL / Acortar URL\n");
 	printf("2.- Buscar codigo URL\n");
@@ -507,6 +690,11 @@ void mostrarMenu() {
 }
 
 int menu(unsigned* arr[MAX_NAME]) {
+	/*
+	F: Solicita qué funcionalidad quiere hacer el usuario, es un bucle.
+	E: Opcion del usuario
+	S: funcionalidad solicitada
+	*/
 	char opcion;
 	do{
 		mostrarMenu();
@@ -532,6 +720,11 @@ int menu(unsigned* arr[MAX_NAME]) {
 
 
 int main(){
+	/*
+	F: Funcion principal del programa
+	E: NA
+	S: El programa, basicamente.
+	*/
 
 	unsigned* arr[MAX_NAME]={NULL};
 	inicializarTablaHash();
