@@ -1,10 +1,10 @@
 /*
-Creado por Earl Alvarado y Brenda Badilla
-Creado el 2 de Noviembre, 7:50 pm
-Última modificación: 7 de Nov, 23:46
-
-Programa que utiliza estructuras de datos y analiza una tabla hash para introducir datos del tipo bit.ly que son URLs recortados y linktr.ee s que son bibliotecas de urls y los simulan con información guardada.
-
+Tecnológico de Costa Rica, Campus Local Cartago, Escuela de Computación, IC-2001 Estructuras de Datos
+Proyecto #1: URL Shortener & lintr.ee
+Brenda Badilla Rodríguez, 2020065241, Earl Alvarado Cabrera, 2020035739
+Entrega: 14 de noviembre del 2020
+Abstract: This project is a shortener of URLs, which by the usage of an algorithm makes a smaller version of an URL, 
+which then is saved in a hash and can be accessed to or deleted. 
 */
 #include <stdlib.h>
 #include <stdio.h>
@@ -117,21 +117,23 @@ void annadirUrl(){
 	E: Información necesaria para la URL
 	S: Se crea el nodo de este tipo
 	*/
+	char cortaUrl [20]; //Aqui van los primeros caracteres de la URL
 	url *nuevo;
 	nuevo=(url *) malloc (sizeof(url));
 	if (nuevo== NULL) printf("No hay memoria disponible!\n");
 	
+	//El usuario elige si introduce la URL desde un archivo o en la terminal
 	int x = 0;
 	printf("\n\r\r Opciones Disponibles: \n\n1.Desde un archivo ");
 	printf("\n2.Directo de terminal\n \nDigite el número correspondiente: ");
 	fflush(stdout);
 	scanf("%d", &x);
 	if (x == 1)
-	//LLama a obtenerArchivo
+				//*******       ARCHIVO      ********//
 	{
 		char link [MAX_NAME];
 		char nombre [MAX_NAME]; //Nombre del archivo
-
+		
 		//Asignar el nombre al archivo
 		printf("Ingrese el nombre del archivo: \n");
 		scanf("%s", nombre);
@@ -139,26 +141,29 @@ void annadirUrl(){
 		FILE *archivo = fopen(nombre, "r");
 		if (archivo == NULL)
 		{
-			printf("\n\r¡Archivo vacío!\n");
+			printf("\n\r¡Archivo vacío o inexistente!\n");
 			annadirUrl();
 		}
 		else
 		{
-			int a;
+			
+			int a=0;
+			//Va asignando a link los caracteres hasta el final 
+			//del archivo
 			while (fgets(link, sizeof(link), archivo) != NULL)
 			{
-				printf("URL %d: ", a=a+1);
+				printf("URL %d: ", a=a+1); //Número de la URL dentro del archivo
 				fputs(link, stdout);
 				fgets(nuevo-> longUrl, MAX_NAME, stdout);
-
-					//Annadir URL n numero de veces
-				printf("Ahora analizaré los valores para crear una nueva url.(AUN EN PROCESO.)\n");  
-				printf("Ingrese un nombre para describir esta URL.\n");
+ 
+				printf("\nIngrese un nombre para describir esta URL: ");
 				fflush(stdout);
     			fgets(nuevo-> nombre, MAX_NAME, stdin);
+				
     			/*--------------*/
     			char temporal[500];
-				for(int f=0; f<strlen(nuevo->longUrl);f++){ //Algoritmo para nuevo URL
+				
+				for(int f=0; f<strlen(nuevo->longUrl);f++){ 
     				char temp = nuevo->longUrl[f];
     				ABC *nuevoabc;
 					nuevoabc=(ABC *) malloc (sizeof(ABC));
@@ -176,38 +181,21 @@ void annadirUrl(){
 					int g; g=0;
 					auxiliar = primero;
 					}
-    			ABC *auxiliar2; 
-				int g; g=0;
 
-				auxiliar2 = primeroabc;
-				char nuevaUrl[20]= "brnarl.co/";
+				//Algoritmo para crear la nueva URL, acortar la URL//
 
-    			while (auxiliar2!=NULL && g<19) {
-					int x= (char)auxiliar2->letra;
-					char y = (char)x;
+				char nuevaUrl[11]= "brnarl.co/";
 
-					if((auxiliar2->letra)%2!=0){
-					
-						strcat(nuevaUrl, &y);
-					}
-					auxiliar2 = auxiliar2->siguienteabc;
-					g++;
-					}
-				printf("%s", nuevaUrl);
-	
-    			/*--------------*/
-    			printf("Por favor ingrese la URL corta brindada.(ESCRIBA CUALQUIERA.)\n");
-    			fflush(stdout);
-    			fgets(nuevo-> shortUrl, MAX_NAME, stdin);
+				strncpy(cortaUrl, nuevo->longUrl, 3);
+				cortaUrl[3]=0;
+				snprintf(nuevo->shortUrl, sizeof(nuevo->shortUrl),  "%s%s",  nuevaUrl, cortaUrl);
+				printf("\nURL corta generada: %s\n", nuevo-> shortUrl);
 
-				printf("Ingrese una descripcion esta URL.\n");
+				printf("Ingrese una descripcion para esta URL.\n");
     			fflush(stdout);
     			fgets(nuevo-> descripcion, MAX_NAME, stdin);
-
 				nuevo->contVisitas=0;
-
 				nuevo->siguiente=NULL;
-
     			if(primero==NULL){
     				printf("Primer elemento\n");
     				primero= nuevo;
@@ -223,6 +211,7 @@ void annadirUrl(){
 	}
 	else
 	{
+		//*******       TERMINAL      ********//
 		printf("Ingrese la URL:\n");
 		fflush(stdout);
 		fgets(nuevo-> longUrl, MAX_NAME, stdin);
@@ -259,29 +248,12 @@ void annadirUrl(){
 			auxiliar = primero;
     	}
 	
-    	ABC *auxiliar2; 
-		int g; g=0;
+		char nuevaUrl[11]= "brnarl.co/";
 
-		auxiliar2 = primeroabc;
-		char nuevaUrl[20]= "brnarl.co/";
-
-    	while (auxiliar2!=NULL && g<19) {
-				int x= (char)auxiliar2->letra;
-				char y = (char)x;
-
-				if((auxiliar2->letra)%2!=0){
-				
-					strcat(nuevaUrl, &y);
-				}
-				auxiliar2 = auxiliar2->siguienteabc;
-				g++;
-			}
-		printf("%s", nuevaUrl);
-
-    	/*--------------*/
-    	printf("Por favor ingrese la URL corta brindada.(ESCRIBA CUALQUIERA.)\n");
-    	fflush(stdout);
-    	fgets(nuevo-> shortUrl, MAX_NAME, stdin);
+		strncpy(cortaUrl, nuevo->longUrl, 3);
+		cortaUrl[3]=0;
+		snprintf(nuevo->shortUrl, sizeof(nuevo->shortUrl),  "%s%s",  nuevaUrl, cortaUrl);
+		printf("\nURL corta generada: %s\n", nuevo-> shortUrl);
 
 		printf("Ingrese una descripcion esta URL.\n");
     	fflush(stdout);
